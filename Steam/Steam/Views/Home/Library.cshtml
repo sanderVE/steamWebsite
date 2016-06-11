@@ -1,0 +1,16 @@
+﻿@using Steam.Models;
+@{
+    ViewBag.Title = "Games";
+}
+<h2>@ViewBag.Title</h2>
+<h3>@ViewBag.Message</h3>
+
+<p>This is an overview of all the game that are in your library.</p>
+<div>
+    @foreach (GameModel games in Model)
+    {
+        <a href="@Url.Action("Game", "Home", new {id = games.id})">@games.title</a>
+            <br>
+    }
+</div>
+

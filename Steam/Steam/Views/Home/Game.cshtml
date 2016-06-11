@@ -1,0 +1,28 @@
+﻿@model GameModel
+@using Steam.Models;
+@{
+    ViewBag.Title = "Game";
+}
+
+<h2>Game</h2>
+
+<div>
+    Title: @Model.title
+    <br>
+    price: @Model.prijs
+    <br>
+    release date: @Model.releaseDate
+    <br>
+    <a href="">Voeg toe aan winkelwagen</a>
+    <br>
+    <a href="">Review deze game</a>
+
+    @*@foreach(ReviewModel review in Model.reviews)
+    {
+        @review.inhoud
+        @review.reviewedBy
+        @review.aanbevolen
+        @review.datum
+        <br>
+    }*@
+</div>
