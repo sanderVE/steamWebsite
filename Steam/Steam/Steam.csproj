@@ -280,6 +280,8 @@
     <Content Include="Views\Home\Game.cshtml" />
     <Content Include="Views\Account\Account.cshtml" />
     <Content Include="Views\Home\Library.cshtml" />
+    <Content Include="Views\Home\Review.cshtml" />
+    <Content Include="Views\Home\Cart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

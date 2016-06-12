@@ -23,7 +23,6 @@ namespace Steam.Controllers
 
         public ActionResult Game(int id)
         {
-            //int a = (int)Session["GebruikerID"];
             DatabaseModel database = new DatabaseModel();
             GameModel game = database.GetGame(id);
             return View(game);
@@ -34,6 +33,49 @@ namespace Steam.Controllers
             DatabaseModel database = new DatabaseModel();
             List<GameModel> games = database.GetGamesUser((int)Session["GebruikerID"]);
             return View(games);
+        }
+
+        public ActionResult Review(int id)
+        {
+            return View();
+        }
+
+        public ActionResult AddToCart(int id)
+        {
+            DatabaseModel database = new DatabaseModel();
+            int cartid = database.GetCart((int)Session["GebruikerID"]);
+            database.AddToCart(cartid, id);
+            return View("index");
+        }
+
+        public ActionResult Cart()
+        {
+            DatabaseModel database = new DatabaseModel();
+            //database.RemoveFromCart();
+            List<GameModel> games = database.GetGamesCart((int)Session["GebruikerID"]);
+            return View(games);
+        }
+
+        public ActionResult Remove(int id)
+        {
+            DatabaseModel database = new DatabaseModel();
+            int cartid = database.GetCart((int)Session["GebruikerID"]);
+            database.RemoveFromCart(cartid);
+            List<GameModel> games = database.GetGamesCart((int)Session["GebruikerID"]);
+            return View(games);
+        }
+
+        public ActionResult Buy()
+        {
+            DatabaseModel database = new DatabaseModel();
+            int cartid = database.GetCart((int)Session["GebruikerID"]);
+            List<GameModel> games = database.GetGamesCart((int)Session["GebruikerID"]);
+            foreach (GameModel g in games)
+            {
+                database.BuyGames(g.id, (int)Session["GebruikerID"]);
+            }
+            database.RemoveFromCart(cartid);
+            return View("Library");
         }
     }
 }

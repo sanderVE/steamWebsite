@@ -13,9 +13,9 @@
     <br>
     release date: @Model.releaseDate
     <br>
-    <a href="">Voeg toe aan winkelwagen</a>
+    <a href="@Url.Action("AddToCart", "Home", new {id = Model.id})">Voeg toe aan winkelwagen</a>
     <br>
-    <a href="">Review deze game</a>
+    <a href="@Url.Action("Review", "Home", new {id = Model.id})">Review deze game</a>
 
     @*@foreach(ReviewModel review in Model.reviews)
     {

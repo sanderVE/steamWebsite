@@ -38,7 +38,92 @@ namespace Steam.Models
             }
         }
 
-        internal List<GameModel> GetGamesUser(int id)
+        public int GetCart(int id)
+        {
+            int ReturnData = 0;
+            using (OracleConnection conn = new OracleConnection(Connectionstring))
+            {
+                using (OracleCommand command = new OracleCommand("SELECT winkelwagenid" + " FROM " + "WINKELWAGEN", conn))
+                {
+                    command.Connection.Open();
+                    using (OracleDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ReturnData = reader.GetInt32(0);
+                        }
+                        return ReturnData;
+                    }
+                }
+            }
+        }
+
+        public void AddToCart(int winkelwagenid, int gameid)
+        {
+
+            using (OracleConnection conn = new OracleConnection(Connectionstring))
+            {
+                using (OracleCommand command = new OracleCommand("INSERT INTO WINKELWAGENREGEL(winkelwagenid, gameid) VALUES(:winkelwagenid,:gebruikerid)", conn))
+                {
+                    command.Parameters.Add("winkelwagenid", winkelwagenid);
+                    command.Parameters.Add("gameid", gameid);
+                    command.Connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void RemoveFromCart(int id)
+        {
+            using (OracleConnection conn = new OracleConnection(Connectionstring))
+            {
+                using (OracleCommand command = new OracleCommand("DELETE FROM WINKELWAGENREGEL WHERE winkelwagenid = " + id, conn))
+                {
+                    command.Connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void BuyGames(int id, int gebruikerid)
+        {
+            RegisterViewModel user = new RegisterViewModel();
+            using (OracleConnection conn = new OracleConnection(Connectionstring))
+            {
+                using (OracleCommand command = new OracleCommand("INSERT INTO GEBRUIKERGAME(gebruikerid, gameid) VALUES(" + gebruikerid +", " + id + ")", conn))
+                {
+                    command.Connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public List<GameModel> GetGamesCart(int id)
+        {
+            List<GameModel> ReturnData = new List<GameModel>();
+            using (OracleConnection conn = new OracleConnection(Connectionstring))
+            {
+                using (OracleCommand command = new OracleCommand("SELECT *" + " FROM " + "Game WHERE gameid IN(SELECT gameid FROM WINKELWAGENREGEL WHERE winkelwagenid = " + id + ")", conn))//IN(SELECT gameID FROM GEBRUIKERGAME WHERE gebruikerID" + id + ")"
+                {
+                    command.Connection.Open();
+                    using (OracleDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int iduser = reader.GetInt32(0);
+                            string name = reader.GetString(1);
+                            int prize = reader.GetInt32(2);
+                            DateTime releaseDate = reader.GetDateTime(3);
+                            GameModel game = new GameModel(iduser, name, prize, releaseDate);
+                            ReturnData.Add(game);
+                        }
+                        return ReturnData;
+                    }
+                }
+            }
+        }
+
+        public List<GameModel> GetGamesUser(int id)
         {
             List<GameModel> ReturnData = new List<GameModel>();
             using (OracleConnection conn = new OracleConnection(Connectionstring))
@@ -145,6 +230,15 @@ namespace Steam.Models
             using (OracleConnection conn = new OracleConnection(Connectionstring))
             {
                 using (OracleCommand command = new OracleCommand("INSERT INTO GEBRUIKER(GEBRUIKERNAAM, WACHTWOORD, EMAILADRES) VALUES(:gebruikersnaam,:wachtwoord,:email)", conn))
+                {
+                    command.Parameters.Add("gebruikersnaam", username);
+                    command.Parameters.Add("wachtwoord", password);
+                    command.Parameters.Add("email", email);
+                    command.Connection.Open();
+                    command.ExecuteNonQuery();
+                }
+
+                using (OracleCommand command = new OracleCommand("INSERT INTO WINKELWAGEN(GEBRUIKERID) VALUES((SELECT gebruikerid FROM GEBRUIKER WHERE gebruikernaam = :gebruikersnaam))", conn))
                 {
                     command.Parameters.Add("gebruikersnaam", username);
                     command.Parameters.Add("wachtwoord", password);
