@@ -66,9 +66,9 @@ namespace Steam.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        public ActionResult Login(LoginViewModel model, string returnUrl)
         {
-            var result = await SignInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, shouldLockout: false);
+            //var result = await SignInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, shouldLockout: false);
             DatabaseModel database = new DatabaseModel();
             string password = database.GetUserPassword(model.Username);
             if(model.Password == password)
@@ -78,12 +78,12 @@ namespace Steam.Controllers
                 Session["Gebruikersnaam"] = user.name;
                 Session["Wachtwoord"] = user.password;
                 //Session.
-                return RedirectToLocal(returnUrl);
+                return RedirectToAction("Index", "Manage");
             }
-            return View(model);
+            return RedirectToAction("Index", "Home");
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            
+
             //switch (result)
             //{
             //    case SignInStatus.Success:
