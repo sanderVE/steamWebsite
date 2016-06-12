@@ -9,11 +9,14 @@ namespace Steam.Controllers
 {
     public class HomeController : Controller
     {
+
+        //homepage
         public ActionResult Index()
         {
             return View();
         }
 
+        //bekijk de store
         public ActionResult Games()
         {
             DatabaseModel database = new DatabaseModel();
@@ -21,6 +24,7 @@ namespace Steam.Controllers
             return View(games);
         }
 
+        //bekijk game
         public ActionResult Game(int id)
         {
             DatabaseModel database = new DatabaseModel();
@@ -28,6 +32,7 @@ namespace Steam.Controllers
             return View(game);
         }
 
+        //bekijk de library
         public ActionResult Library()
         {
             DatabaseModel database = new DatabaseModel();
@@ -35,11 +40,13 @@ namespace Steam.Controllers
             return View(games);
         }
 
+        //bekijk review
         public ActionResult Review(int id)
         {
             return View();
         }
 
+        //voeg iets ttoe aan winkelwagen
         public ActionResult AddToCart(int id)
         {
             DatabaseModel database = new DatabaseModel();
@@ -48,14 +55,15 @@ namespace Steam.Controllers
             return View("index");
         }
 
+        //laat winkelwagen zien
         public ActionResult Cart()
         {
             DatabaseModel database = new DatabaseModel();
-            //database.RemoveFromCart();
             List<GameModel> games = database.GetGamesCart((int)Session["GebruikerID"]);
             return View(games);
         }
 
+        //haal game uit winkelwagen
         public ActionResult Remove(int id)
         {
             DatabaseModel database = new DatabaseModel();
@@ -65,6 +73,7 @@ namespace Steam.Controllers
             return View(games);
         }
 
+        //koop alle games in winkelwagen
         public ActionResult Buy()
         {
             DatabaseModel database = new DatabaseModel();

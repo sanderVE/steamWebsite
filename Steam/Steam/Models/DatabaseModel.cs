@@ -8,10 +8,13 @@ namespace Steam.Models
 {
     public class DatabaseModel
     {
+        //de connectie string naar mijn athena database
         static string Connectionstring = @"Data Source = (DESCRIPTION = (ADDRESS_LIST = (ADDRESS = (PROTOCOL = TCP)(HOST = fhictora01.fhict.local)(PORT = 1521)))(CONNECT_DATA = (SERVER = DEDICATED)(SERVICE_NAME = fhictora))); User ID = dbi353331; PASSWORD =Wachtwoord123;";
 
+        //oracleconnectie
         OracleConnection conn = new OracleConnection(Connectionstring);
 
+        //haal alle games op voor de store
         public List<GameModel> GetGames()
         {
 
@@ -38,6 +41,7 @@ namespace Steam.Models
             }
         }
 
+        //haal een winkelwagen op op basis van het id van een user
         public int GetCart(int id)
         {
             int ReturnData = 0;
@@ -58,6 +62,7 @@ namespace Steam.Models
             }
         }
 
+        //voeg game toe aan winkelwagen
         public void AddToCart(int winkelwagenid, int gameid)
         {
 
@@ -73,6 +78,7 @@ namespace Steam.Models
             }
         }
 
+        //verwijder games uit winkelwagen
         public void RemoveFromCart(int id)
         {
             using (OracleConnection conn = new OracleConnection(Connectionstring))
@@ -85,6 +91,7 @@ namespace Steam.Models
             }
         }
 
+        //voeg games toe aan library van user
         public void BuyGames(int id, int gebruikerid)
         {
             RegisterViewModel user = new RegisterViewModel();
@@ -98,6 +105,7 @@ namespace Steam.Models
             }
         }
 
+        //haal alle games in de winkelwagen van een user op basis van user id
         public List<GameModel> GetGamesCart(int id)
         {
             List<GameModel> ReturnData = new List<GameModel>();
@@ -123,6 +131,7 @@ namespace Steam.Models
             }
         }
 
+        //haal alle games in de library van een user op basis van user id
         public List<GameModel> GetGamesUser(int id)
         {
             List<GameModel> ReturnData = new List<GameModel>();
@@ -148,6 +157,7 @@ namespace Steam.Models
             }
         }
 
+        ////haal een game op op basis van de id
         public GameModel GetGame(int id)
         {
             GameModel ReturnData = new GameModel();
@@ -173,6 +183,7 @@ namespace Steam.Models
             }
         }
 
+        //haal een wachtwoord op op basis van de username
         public string GetUserPassword(string naam)
         {
             string ReturnData = null;
@@ -195,6 +206,7 @@ namespace Steam.Models
             }
         }
 
+        //haal een user op op basis van de username
         public AccountModel GetUser(string naam)
         {
             AccountModel ReturnData;
@@ -224,6 +236,7 @@ namespace Steam.Models
             }
         }
 
+        //insert person en geef hem een winkelwagen
         public void InsertPerson(string username, string password, string email)
         {
             RegisterViewModel user = new RegisterViewModel();

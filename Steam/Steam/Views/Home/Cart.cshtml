@@ -8,6 +8,7 @@
 <div>
     @foreach (GameModel games in Model)
     {
+        //alle games toevoegen
         <a href="@Url.Action("Remove", "Home", new {id = games.id})">@games.title</a>
         <br>
     }
